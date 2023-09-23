@@ -8,12 +8,13 @@ import ru.practicum.model.EndpointHit;
 import ru.practicum.model.ViewStats;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class HitMapper {
 
     public static EndpointHit toEndpointHit(HitRequest hit) {
         return new EndpointHit(null, hit.getApp(), hit.getUri(), hit.getIp(), LocalDateTime.parse(hit.getTimestamp(),
-                Constants.DATE_TIME_FORMAT));
+                DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT)));
     }
 
     public static ViewStatsResponse toViewStatsResponse(ViewStats stats) {

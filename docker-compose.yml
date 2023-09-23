@@ -27,7 +27,7 @@ services:
       - POSTGRES_USERNAME=postgres
       - POSTGRES_PASSWORD=iamroot
 
-  main-server:
+  ewm-service:
     image: main-server
     build: main-server
     ports:
@@ -40,7 +40,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=iamroot
 
-  main-db:
+  ewm-db:
     image: postgres:14-alpine
     container_name: main-db
     ports:

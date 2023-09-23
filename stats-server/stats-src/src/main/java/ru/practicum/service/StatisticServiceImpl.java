@@ -12,6 +12,7 @@ import ru.practicum.mapper.HitMapper;
 import ru.practicum.repository.EndpointHitRepository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,8 +31,8 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     public List<ViewStatsResponse> getStats(String start, String end, List<String> uri, Boolean unique) {
         try {
-            LocalDateTime startTime = LocalDateTime.parse(start, Constants.DATE_TIME_FORMAT);
-            LocalDateTime endTime = LocalDateTime.parse(end, Constants.DATE_TIME_FORMAT);
+            LocalDateTime startTime = LocalDateTime.parse(start, DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT));
+            LocalDateTime endTime = LocalDateTime.parse(end, DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT));
             if (unique && uri != null) {
                 return endPointHitRepository.getStatsByUriUniq(uri, startTime, endTime).stream().map(HitMapper::toViewStatsResponse)
                         .collect(Collectors.toList());

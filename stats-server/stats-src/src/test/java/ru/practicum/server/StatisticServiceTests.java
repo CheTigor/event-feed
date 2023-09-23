@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.practicum.dto.HitRequest;
 import ru.practicum.dto.ViewStatsResponse;
-import ru.practicum.repository.EndpointHitRepository;
 import ru.practicum.service.StatisticService;
 
 import java.util.ArrayList;
