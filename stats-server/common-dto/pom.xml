@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>common-DTO</artifactId>
+    <artifactId>common-dto</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

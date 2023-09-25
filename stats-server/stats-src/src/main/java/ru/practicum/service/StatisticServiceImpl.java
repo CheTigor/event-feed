@@ -34,14 +34,24 @@ public class StatisticServiceImpl implements StatisticService {
             LocalDateTime startTime = LocalDateTime.parse(start, DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT));
             LocalDateTime endTime = LocalDateTime.parse(end, DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT));
             if (unique && uri != null) {
-                return endPointHitRepository.getStatsByUriUniq(uri, startTime, endTime).stream().map(HitMapper::toViewStatsResponse)
-                        .collect(Collectors.toList());
+                if (uri.isEmpty()) {
+                    return endPointHitRepository.getStatsUniq(startTime, endTime).stream().map(HitMapper::toViewStatsResponse)
+                            .collect(Collectors.toList());
+                } else {
+                    return endPointHitRepository.getStatsByUriUniq(uri, startTime, endTime).stream().map(HitMapper::toViewStatsResponse)
+                            .collect(Collectors.toList());
+                }
             } else if (unique && uri == null) {
                 return endPointHitRepository.getStatsUniq(startTime, endTime).stream().map(HitMapper::toViewStatsResponse)
                         .collect(Collectors.toList());
             } else if (!unique && uri != null) {
-                return endPointHitRepository.getStatsByUri(uri, startTime, endTime).stream().map(HitMapper::toViewStatsResponse)
-                        .collect(Collectors.toList());
+                if (uri.isEmpty()) {
+                    return endPointHitRepository.getStats(startTime, endTime).stream().map(HitMapper::toViewStatsResponse)
+                            .collect(Collectors.toList());
+                } else {
+                    return endPointHitRepository.getStatsByUri(uri, startTime, endTime).stream().map(HitMapper::toViewStatsResponse)
+                            .collect(Collectors.toList());
+                }
             } else if (!unique && uri == null) {
                 return endPointHitRepository.getStats(startTime, endTime).stream().map(HitMapper::toViewStatsResponse)
                         .collect(Collectors.toList());
@@ -49,8 +59,6 @@ public class StatisticServiceImpl implements StatisticService {
             throw new IllegalArgumentException("По данному запросу невозможно получить выборку");
         } catch (DateTimeParseException e) {
             throw new DateTimeFormatException(String.format("Неверный формат даты - start: %s, end: %s", start, end));
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -62,8 +70,6 @@ public class StatisticServiceImpl implements StatisticService {
             return hitResponse;
         } catch (DateTimeParseException e) {
             throw new DateTimeFormatException(String.format("Неверный формат даты: %s", hit.getTimestamp()));
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getMessage());
         }
     }
 }

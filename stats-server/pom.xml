@@ -14,7 +14,7 @@
 
     <modules>
         <module>stat-client</module>
-        <module>common-DTO</module>
+        <module>common-dto</module>
         <module>stats-src</module>
     </modules>
 
