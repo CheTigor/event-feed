@@ -8,6 +8,7 @@ import ru.practicum.dto.HitRequest;
 import ru.practicum.dto.HitResponse;
 import ru.practicum.dto.ViewStatsResponse;
 import ru.practicum.exception.DateTimeFormatException;
+import ru.practicum.exception.DatesValidationException;
 import ru.practicum.mapper.HitMapper;
 import ru.practicum.repository.EndpointHitRepository;
 
@@ -33,6 +34,9 @@ public class StatisticServiceImpl implements StatisticService {
         try {
             LocalDateTime startTime = LocalDateTime.parse(start, DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT));
             LocalDateTime endTime = LocalDateTime.parse(end, DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT));
+            if (startTime.isAfter(endTime)) {
+                throw new DatesValidationException(String.format("endTime: %s раньше startTime: %s", endTime, startTime));
+            }
             if (unique && uri != null) {
                 if (uri.isEmpty()) {
                     return endPointHitRepository.getStatsUniq(startTime, endTime).stream().map(HitMapper::toViewStatsResponse)
