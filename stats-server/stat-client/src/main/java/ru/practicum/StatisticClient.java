@@ -8,19 +8,21 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.dto.HitRequest;
+import ru.practicum.dto.ViewStatsResponse;
 
 import java.util.List;
+
+import static ru.practicum.constants.Constants.STAT_URL;
 
 @Service
 public class StatisticClient extends BaseClient {
 
-    private static final String API_PREFIX = "/bookings";
 
     @Autowired
-    public StatisticClient(@Value("${statistic-server.url}") String serverUrl, RestTemplateBuilder builder) {
+    public StatisticClient(@Value(STAT_URL) String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
-                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
+                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
                         .requestFactory(HttpComponentsClientHttpRequestFactory::new)
                         .build()
         );
@@ -30,8 +32,7 @@ public class StatisticClient extends BaseClient {
         return post("/hit", hit);
     }
 
-    public ResponseEntity<Object> getStats(String start, String end, List<String> uris, Boolean uniq) {
-        return get("/stats" + "?start=" + start + "&end=" + end + "&uris=" + uris + "&unique=" + uniq);
+    public ResponseEntity<List<ViewStatsResponse>> getStats(String start, String end, String uris, Boolean uniq) {
+        return getStats("/stats" + "?start=" + start + "&end=" + end + "&uris=" + uris + "&unique=" + uniq);
     }
-
 }
