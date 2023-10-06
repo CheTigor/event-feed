@@ -41,9 +41,6 @@ import java.util.stream.Collectors;
 @Transactional
 public class EventServiceImpl implements EventService {
 
-    private final static String MAIN_SERVICE_NAME = "emw-main-service";
-    private final static String START_TIME = "2020-01-01 00:00:00";
-    private final static String END_TIME = "2300-01-01 00:00:00";
     private final StatisticClient client;
     private final EventRepository eventRep;
     private final CategoryRepository catRep;
@@ -130,13 +127,6 @@ public class EventServiceImpl implements EventService {
         log.debug("В базе данных сохранен event: {}", finalEvent);
         return EventMapper.toEventResponse(finalEvent);
     }
-
-    /*public List<ParticipationRepsonseDto> getEventsRequests(Long userId, Long eventId) {
-    }*/
-
-    /*@PatchMapping("/users/{userId}/events/{eventId}/requests")
-    public ParticipationRepsonseDto decideRequest(EventRequestStatusUpdateRequest request, Long userId, Long eventId) {
-    }*/
 
     @Override
     public List<EventResponseDto> getAdminEventsByParams(EventAdminParams params, Integer from, Integer size) {
@@ -279,7 +269,7 @@ public class EventServiceImpl implements EventService {
 
 
     private void saveHit(HttpServletRequest request) {
-        client.saveHit(new HitRequest(MAIN_SERVICE_NAME, request.getRequestURI(), request.getRemoteAddr(),
+        client.saveHit(new HitRequest(Constants.MAIN_SERVICE_NAME, request.getRequestURI(), request.getRemoteAddr(),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT))));
     }
 
@@ -332,34 +322,13 @@ public class EventServiceImpl implements EventService {
     }
 
     private Long getViews(HttpServletRequest request) {
-        List<ViewStatsResponse> stats = client.getStats(START_TIME, END_TIME, request.getRequestURI(), true).getBody();
+        List<ViewStatsResponse> stats = client.getStats(Constants.START_TIME, Constants.END_TIME, request.getRequestURI(),
+                true).getBody();
         Long views = 0L;
         if (stats != null) {
             views = stats.stream().filter(e -> e.getUri().equals(request.getRequestURI())).findFirst().get().getHits();
         }
         return views;
     }
-    /*private Long parseViews(Boolean uniq, HttpServletRequest request) {
-        Object obj = client.getStats(START_TIME, END_TIME, request.getRequestURI(), uniq).getBody();
-        if (obj == null) {
-            return 0L;
-        } else {
-            String[] str = obj.toString().split("}");
-            Map<String, Long> viewsMap = new HashMap<>();
-            for (String text : str) {
-                if (text.contains("hits=")) {
-                    int startIndx = text.indexOf("hits=") + 5;
-                    int endIndx = startIndx;
-                    for (int i = startIndx; i < text.length(); i++) {
-                        if (text.charAt(i) == '}') {
-                            return Long.parseLong(text.substring(startIndx, endIndx));
-                        } else {
-                            endIndx = i;
-                        }
-                    }
-                }
-            }
-        }
-    }*/
 
 }
