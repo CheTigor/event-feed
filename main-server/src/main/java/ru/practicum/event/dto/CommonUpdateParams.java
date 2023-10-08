@@ -3,7 +3,6 @@ package ru.practicum.event.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.event.model.Location;
 
 @Data
 @AllArgsConstructor

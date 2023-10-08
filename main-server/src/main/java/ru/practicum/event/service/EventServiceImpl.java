@@ -18,8 +18,6 @@ import ru.practicum.event.enums.EventStateAdminAction;
 import ru.practicum.event.enums.Sorts;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.model.EventAdminParams;
-import ru.practicum.event.model.EventPublicParams;
 import ru.practicum.event.model.QEvent;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.DateValidationException;

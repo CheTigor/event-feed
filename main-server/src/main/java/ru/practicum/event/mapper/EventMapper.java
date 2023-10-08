@@ -3,7 +3,6 @@ package ru.practicum.event.mapper;
 import ru.practicum.constants.Constants;
 import ru.practicum.event.dto.*;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.model.Location;
 import ru.practicum.user.mapper.UserMapper;
 
 import java.time.format.DateTimeFormatter;

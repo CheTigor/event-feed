@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.enums.EventStateUserAction;
-import ru.practicum.event.model.Location;
 
 import javax.validation.constraints.Size;
 

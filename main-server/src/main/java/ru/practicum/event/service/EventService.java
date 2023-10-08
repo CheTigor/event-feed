@@ -1,8 +1,6 @@
 package ru.practicum.event.service;
 
 import ru.practicum.event.dto.*;
-import ru.practicum.event.model.EventAdminParams;
-import ru.practicum.event.model.EventPublicParams;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

@@ -16,6 +16,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @Valid
+@RequestMapping("/admin/users")
 public class UserController {
 
     private final UserService userService;
@@ -25,8 +26,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/admin/users")
-
+    @GetMapping
     public List<UserResponseDto> getUsers(@RequestParam(value = "ids", required = false) @NotNull List<Long> userIds,
                                           @RequestParam(value = "from", defaultValue = "0") @Min(0) Integer from,
                                           @RequestParam(value = "size", defaultValue = "10") @Min(1) Integer size) {
@@ -36,7 +36,7 @@ public class UserController {
         return response;
     }
 
-    @PostMapping("/admin/users")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDto createUser(@RequestBody @Valid UserRequestDto user) {
         log.info("POST запрос postUser - userRequest: \n{}", user);
@@ -45,7 +45,7 @@ public class UserController {
         return response;
     }
 
-    @DeleteMapping("/admin/users/{userId}")
+    @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable(value = "userId") @Min(1) Long userId) {
         log.info("DELETE запрос deleteUser - userId: \n{}", userId);
