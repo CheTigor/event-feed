@@ -9,5 +9,6 @@ public class ErrorResponse {
 
     private String error;
     private String description;
+    private String stackTrace;
 
 }
