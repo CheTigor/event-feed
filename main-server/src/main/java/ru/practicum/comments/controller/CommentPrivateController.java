@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.comments.dto.CommentRequestDto;
 import ru.practicum.comments.dto.CommentFullResponseDto;
+import ru.practicum.comments.dto.CommentRequestDto;
 import ru.practicum.comments.service.CommentService;
 
 import javax.validation.Valid;
@@ -31,7 +31,7 @@ public class CommentPrivateController {
                                                 @PathVariable(name = "userId") @Min(1) Long userId,
                                                 @RequestParam(name = "eventId") @Min(1) Long eventId,
                                                 @RequestParam(name = "responseToId", required = false)
-                                                    @Min(1) Long responseToId) {
+                                                @Min(1) Long responseToId) {
         log.info("POST запрос createComment - userId: \n{}, eventId: \n{}, request: \n{}", userId, eventId, request);
         final CommentFullResponseDto response = service.createComment(userId, eventId, request, responseToId);
         log.info("POST ответ createComment - response: \n{}", response);
@@ -43,7 +43,7 @@ public class CommentPrivateController {
                                                              @RequestParam(name = "from", defaultValue = "0")
                                                              @Min(0) Integer from,
                                                              @RequestParam(name = "size", defaultValue = "10")
-                                                                 @Min(1) Integer size) {
+                                                             @Min(1) Integer size) {
         log.info("GET запрос getAllCommentsByUser - userId: \n{}", userId);
         final List<CommentFullResponseDto> response = service.getAllCommentsByUser(userId, from, size);
         log.info("GET ответ getAllCommentsByUser - response: \n{}", response);

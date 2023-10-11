@@ -76,7 +76,7 @@ public class CommentServiceImpl implements CommentService {
                     String.format("В базе данных нет комментария с id - %d", responseToId)));
             if (!mainCom.getEventId().equals(eventId)) {
                 throw new ValidationException(String.format("Ошибка создания комментария - ответ на комментарий должен " +
-                        "быть с тем же eventId что и основной комментарий: expected - %s, current - %s",
+                                "быть с тем же eventId что и основной комментарий: expected - %s, current - %s",
                         comment.getEventId(), eventId));
             }
             comment.setItsResponse(true);
@@ -89,7 +89,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentFullResponseDto> getAllCommentsByUser(Long userId, Integer from, Integer size) {
         userValidate(userId);
-        return comRep.findByUserId(userId, PageRequest.of(from/size, size)).stream()
+        return comRep.findByUserId(userId, PageRequest.of(from / size, size)).stream()
                 .map(CommentMapper::toFullResponse).collect(Collectors.toList());
     }
 
@@ -125,7 +125,7 @@ public class CommentServiceImpl implements CommentService {
         if (!eventRep.existsById(eventId)) {
             throw new NotFoundException(String.format("В базе данных нет событие с id - %d", eventId));
         }
-        return comRep.findByEventId(eventId, PageRequest.of(from/size, size)).stream()
+        return comRep.findByEventId(eventId, PageRequest.of(from / size, size)).stream()
                 .map(CommentMapper::toShortResponse).collect(Collectors.toList());
     }
 

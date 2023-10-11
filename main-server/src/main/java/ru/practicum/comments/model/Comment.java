@@ -3,8 +3,6 @@ package ru.practicum.comments.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.event.model.Event;
-import ru.practicum.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

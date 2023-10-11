@@ -1,12 +1,9 @@
 package ru.practicum.comments.service;
 
-import org.springframework.web.bind.annotation.*;
 import ru.practicum.comments.dto.CommentFullResponseDto;
 import ru.practicum.comments.dto.CommentRequestDto;
 import ru.practicum.comments.dto.CommentShortResponseDto;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.List;
 
 public interface CommentService {

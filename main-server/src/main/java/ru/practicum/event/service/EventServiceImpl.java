@@ -171,8 +171,8 @@ public class EventServiceImpl implements EventService {
             builder.and(EVENT.eventDate.before(params.getRangeEnd()));
         }
         return eventRep.findAll(builder, PageRequest.of(
-                        from / size, size)).stream().map(ev -> EventMapper.toEventResponse(ev,
-                        findComments(ev.getId()))).collect(Collectors.toList());
+                from / size, size)).stream().map(ev -> EventMapper.toEventResponse(ev,
+                findComments(ev.getId()))).collect(Collectors.toList());
     }
 
     @Override
@@ -337,9 +337,8 @@ public class EventServiceImpl implements EventService {
     }
 
     private List<Comment> findComments(Long eventId) {
-        List<Comment> comments = comRep.findByEventIdAndItsResponse(eventId, false, PageRequest.of(0, 10))
+        return comRep.findByEventIdAndItsResponse(eventId, false, PageRequest.of(0, 10))
                 .toList();
-        return comments;
     }
 
 }
