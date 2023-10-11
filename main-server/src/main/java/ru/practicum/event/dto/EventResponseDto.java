@@ -4,8 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.category.model.Category;
+import ru.practicum.comments.model.Comment;
+import ru.practicum.event.dto.Location;
 import ru.practicum.event.enums.EventState;
 import ru.practicum.user.model.User;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -28,4 +32,5 @@ public class EventResponseDto {
     private EventState state;
     private String title;
     private Long views;
+    private List<Comment> comments;
 }

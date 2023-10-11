@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import ru.practicum.StatisticClient;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.repository.CategoryRepository;
+import ru.practicum.comments.model.Comment;
+import ru.practicum.comments.repository.CommentRepository;
 import ru.practicum.constants.Constants;
 import ru.practicum.dto.HitRequest;
 import ru.practicum.dto.ViewStatsResponse;
@@ -43,13 +45,16 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRep;
     private final CategoryRepository catRep;
     private final UserRepository userRep;
+    private final CommentRepository comRep;
 
     @Autowired
-    public EventServiceImpl(StatisticClient client, EventRepository eventRep, CategoryRepository catRep, UserRepository userRep) {
+    public EventServiceImpl(StatisticClient client, EventRepository eventRep, CategoryRepository catRep,
+                            UserRepository userRep, CommentRepository comRep) {
         this.client = client;
         this.eventRep = eventRep;
         this.catRep = catRep;
         this.userRep = userRep;
+        this.comRep = comRep;
     }
 
     @Override
@@ -75,8 +80,9 @@ public class EventServiceImpl implements EventService {
                 LocalDateTime.now().withNano(0), request.getDescription(), eventDate, user, request.getLocation().getLat(),
                 request.getLocation().getLon(), request.getPaid(), request.getParticipantLimit(), null,
                 request.getRequestModeration(), EventState.PENDING, request.getTitle(), 0L));
-        log.debug("В базе данных сохранен event: {}", event);
-        return EventMapper.toEventResponse(event);
+        final EventResponseDto finalEvent = EventMapper.toEventResponse(event, findComments(event.getId()));
+        log.debug("В базе данных сохранен event: {}", finalEvent);
+        return finalEvent;
     }
 
     @Override
@@ -89,9 +95,9 @@ public class EventServiceImpl implements EventService {
         }
         saveHit(request);
         event.setViews(getViews(request));
-        final Event response = eventRep.save(event);
+        final EventResponseDto response = EventMapper.toEventResponse(eventRep.save(event), findComments(eventId));
         log.debug("В БД сохранено новое значение views для event: {}", response);
-        return EventMapper.toEventResponse(response);
+        return response;
     }
 
     @Override
@@ -121,9 +127,10 @@ public class EventServiceImpl implements EventService {
                     break;
             }
         }
-        final Event finalEvent = eventRep.save(updateEventParams(event, EventMapper.toCommonUpdateParams(updEvent)));
+        final EventResponseDto finalEvent = EventMapper.toEventResponse(eventRep.save(
+                updateEventParams(event, EventMapper.toCommonUpdateParams(updEvent))), findComments(eventId));
         log.debug("В базе данных сохранен event: {}", finalEvent);
-        return EventMapper.toEventResponse(finalEvent);
+        return finalEvent;
     }
 
     @Override
@@ -164,8 +171,8 @@ public class EventServiceImpl implements EventService {
             builder.and(EVENT.eventDate.before(params.getRangeEnd()));
         }
         return eventRep.findAll(builder, PageRequest.of(
-                        from / size, size)).stream().map(EventMapper::toEventResponse)
-                .collect(Collectors.toList());
+                        from / size, size)).stream().map(ev -> EventMapper.toEventResponse(ev,
+                        findComments(ev.getId()))).collect(Collectors.toList());
     }
 
     @Override
@@ -192,9 +199,10 @@ public class EventServiceImpl implements EventService {
                 event.setState(EventState.CANCELED);
             }
         }
-        final Event finalEvent = eventRep.save(updateEventParams(event, EventMapper.toCommonUpdateParams(updEvent)));
+        final EventResponseDto finalEvent = EventMapper.toEventResponse(eventRep.save(
+                updateEventParams(event, EventMapper.toCommonUpdateParams(updEvent))), findComments(eventId));
         log.debug("В БД сохранен event: {}", finalEvent);
-        return EventMapper.toEventResponse(finalEvent);
+        return finalEvent;
     }
 
     @Override
@@ -260,11 +268,10 @@ public class EventServiceImpl implements EventService {
         }
         saveHit(request);
         event.setViews(getViews(request));
-        final Event response = eventRep.save(event);
+        final EventResponseDto response = EventMapper.toEventResponse(eventRep.save(event), findComments(id));
         log.debug("В БД сохранено новое значение views для event: {}", response);
-        return EventMapper.toEventResponse(response);
+        return response;
     }
-
 
     private void saveHit(HttpServletRequest request) {
         client.saveHit(new HitRequest(Constants.MAIN_SERVICE_NAME, request.getRequestURI(), request.getRemoteAddr(),
@@ -327,6 +334,12 @@ public class EventServiceImpl implements EventService {
             views = stats.stream().filter(e -> e.getUri().equals(request.getRequestURI())).findFirst().get().getHits();
         }
         return views;
+    }
+
+    private List<Comment> findComments(Long eventId) {
+        List<Comment> comments = comRep.findByEventIdAndItsResponse(eventId, false, PageRequest.of(0, 10))
+                .toList();
+        return comments;
     }
 
 }

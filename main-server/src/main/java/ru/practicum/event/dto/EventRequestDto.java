@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.event.dto.Location;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
