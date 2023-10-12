@@ -4,6 +4,8 @@ drop table IF EXISTS events CASCADE;
 drop table IF EXISTS requests CASCADE;
 drop table IF EXISTS compilations CASCADE;
 drop table IF EXISTS compilation_events CASCADE;
+drop table IF EXISTS comments CASCADE;
+drop table IF EXISTS responses_comment CASCADE;
 
 create TABLE IF NOT EXISTS users (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -62,4 +64,23 @@ create TABLE IF NOT EXISTS compilation_events (
     CONSTRAINT fk_ce_to_comp FOREIGN KEY(compilation_id) REFERENCES compilations(id) ON delete CASCADE,
     CONSTRAINT fk_ce_to_events FOREIGN KEY(event_id) REFERENCES events(id) ON delete CASCADE,
     UNIQUE(compilation_id, event_id)
+);
+
+create TABLE IF NOT EXISTS comments (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    text VARCHAR,
+    event_id BIGINT,
+    user_id BIGINT,
+    created TIMESTAMP,
+    its_response BOOLEAN,
+    CONSTRAINT fk_com_to_events FOREIGN KEY(event_id) REFERENCES events(id) ON delete CASCADE,
+    CONSTRAINT fk_com_to_users FOREIGN KEY(user_id) REFERENCES users(id) ON delete CASCADE
+);
+
+create TABLE IF NOT EXISTS responses_comment (
+    main_comment_id BIGINT,
+    response_id BIGINT,
+    CONSTRAINT fk_ac_to_comments FOREIGN KEY(main_comment_id) REFERENCES comments(id) ON delete CASCADE,
+    CONSTRAINT fk_ac_to_response FOREIGN KEY(response_id) REFERENCES comments(id) ON delete CASCADE,
+    UNIQUE(main_comment_id, response_id)
 );

@@ -1,11 +1,13 @@
 package ru.practicum.event.mapper;
 
+import ru.practicum.comments.model.Comment;
 import ru.practicum.constants.Constants;
 import ru.practicum.event.dto.*;
 import ru.practicum.event.model.Event;
 import ru.practicum.user.mapper.UserMapper;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class EventMapper {
 
@@ -24,7 +26,7 @@ public class EventMapper {
                 event.getViews());
     }
 
-    public static EventResponseDto toEventResponse(Event event) {
+    public static EventResponseDto toEventResponse(Event event, List<Comment> comments) {
         return new EventResponseDto(
                 event.getId(),
                 event.getAnnotation(),
@@ -43,7 +45,8 @@ public class EventMapper {
                 event.getRequestModeration(),
                 event.getState(),
                 event.getTitle(),
-                event.getViews());
+                event.getViews(),
+                comments);
     }
 
     public static CommonUpdateParams toCommonUpdateParams(UpdateEventAdminRequestDto event) {

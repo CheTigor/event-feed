@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.request.dto.ParticipationResponseDto;
+import ru.practicum.request.service.RequestService;
 import ru.practicum.request.service.RequestServiceImpl;
 
 import javax.validation.constraints.Min;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequestMapping("/users/{userId}/requests")
 public class RequestPrivateController {
 
-    private final RequestServiceImpl service;
+    private final RequestService service;
 
     @Autowired
     public RequestPrivateController(RequestServiceImpl service) {
